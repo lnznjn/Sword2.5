@@ -1,0 +1,9 @@
+{
+    "help": "Get help.",
+    "quit": "Exit.",
+    "scan": "Scan hosts.",
+    "hosts": "Show hosts information.",
+    "sniff": "Sniff packets. sniff -f <filter BPF> -s -n <pcap file name>.",
+    "block": "Block target internet access. block -t <target ip>.",
+    "free": "Restore target internet access."
+}
