@@ -133,18 +133,18 @@ class SwordInterpreter(BaseInterpreter):
     def _scan_handle(self):
         scanner = Scanner()
         text('Judging os need more time.', end='')
-        console.print('[bold yellow][TEXT][/] If judge os.([yellow]Y/n[/])>>> ', end='')
-        choice = input()
+        choice = input('\033[33;1m[>]\033[0m If judge os. <Y/n> ')
 
         if choice in ('n', 'N'):
-            with console.status('[bold blue]Scanning...[/]', spinner='line'):
-                try:
-                    result = scanner.scan_host()
-                
-                except KeyboardInterrupt:
-                    info('Stopped.')
-                    return
-                
+            #with console.status('[bold blue]Scanning...[/]', spinner='line'):
+            try:
+                result = scanner.scan_host()
+            
+            except KeyboardInterrupt:
+                info('Stopped.')
+                return
+            
+            info(f'{len(result)} hosts discovered.')
             info('Scan done.')
             
             for num in range(0, len(result)):
@@ -152,20 +152,17 @@ class SwordInterpreter(BaseInterpreter):
                 self._hosts_list.append(host)
 
         else:
-            with console.status('[bold blue]Scanning...[/]', spinner='line'):
-                try:
-                    result = scanner.scan_host_and_judge_os()
-                
-                except KeyboardInterrupt:
-                    info('Stopped.')
-                    return
-                
-                num = 0
-                for ip in result:
-                    host = Host(ip, result[ip], str(num))
-                    self._hosts_list.append(host)
-                    num += 1
-                info('Scan done.')
+            #with console.status('[bold blue]Scanning...[/]', spinner='line'):
+            try:
+                result = scanner.scan_host_and_judge_os()
+            
+            except KeyboardInterrupt:
+                info('Stopped.')
+                return
+            
+            self._hosts_list = result
+            info(f'{len(result)} hosts is discovered.')
+            info('Scan done.')
 
     def _hosts_handle(self):
         if not len(self._hosts_list):

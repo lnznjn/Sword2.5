@@ -1,13 +1,15 @@
 from rich.console import Console
 
-import os, sys
+import os
+
+path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 title = f'''[blue]
 ███████ ██     ██  ██████  ██████  ██████     -=[ [bold white]Author:[/] [bold yellow]Kiyotaka Ayanokoji[/]  
 ██      ██     ██ ██    ██ ██   ██ ██   ██    -=[ 
 ███████ ██  █  ██ ██    ██ ██████  ██   ██    -=[ [bold white]Version:[/] [u yellow]2.5[/]
      ██ ██ ███ ██ ██    ██ ██   ██ ██   ██    -=[
-███████  ███ ███   ██████  ██   ██ ██████     -=[ [bold white]Part:[/] [green]{sys.argv[0]}[/]
+███████  ███ ███   ██████  ██   ██ ██████     -=[ [bold white]Part:[/] [green]{path}[/]
 [/]'''
 
 con = Console()
