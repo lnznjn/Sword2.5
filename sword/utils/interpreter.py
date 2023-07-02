@@ -56,6 +56,8 @@ class BaseInterpreter(object):
             except KeyboardInterrupt:
                 self._quit()
 
+            except EOFError:
+                self._quit()
     def _quit(self):
         exit()
     

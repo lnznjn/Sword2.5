@@ -8,7 +8,7 @@ from rich.console import Console
 from scapy.all import IP, ICMP, sr1
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from sword.utils.output import error, info
+from sword.utils.output import error, info, text
 from get_network_info_modular import get_local_host
 from host import Host
 
@@ -74,18 +74,13 @@ class Scanner(object):
         alive_hosts = self.scan_host()
         hosts = list()
 
+        info(f'{len(alive_hosts)} is discovered.')
         info('Judging...')
+        text('[Ctrl-c] to stop.')
         num = 0
-        with ThreadPoolExecutor(max_workers=self.worker) as executor:
-            iterator = tqdm(
-                iterable=executor.map(self._judge, alive_hosts),
-                total=len(alive_hosts),
-                ncols=45,
-                bar_format="{percentage:3.0f}% |{bar}| {n_fmt}/{total_fmt}"
-            )
-
+        with ThreadPoolExecutor(max_workers=self.max_worker) as executor:
             try:   
-                for host, ip in iterator:
+                for host, ip in executor.map(self._judge, alive_hosts):
                     if ip in host['scan'] and host['scan'][ip]['osmatch']:
                         h = Host(ip, host['scan'][ip]['osmatch'][0]['name'], str(num))
 
@@ -96,7 +91,6 @@ class Scanner(object):
                     num += 1
 
             except KeyboardInterrupt:
-                iterator.close()
                 info('Scaner stopped.')
         '''
         for host in alive_hosts:

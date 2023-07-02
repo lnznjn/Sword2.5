@@ -7,6 +7,7 @@ class Host(object):
         self.mac = getmacbyip(ip)
         self.os = os
         self.block = False
+        self.limit = False
 
     def __eq__(self, other):
         return self.ip == other.ip
@@ -15,8 +16,11 @@ class Host(object):
         return hash((self.ip, self.mac))
 
     def get_status(self):
-        if self.block:
-            return '[bold red]blocked[/]'
-
+        if self.block or self.limit:
+            if self.limit:
+                return '[bold yellow]Limited[/]'
+            else:
+                return '[bold red]blocked[/]'
+        
         else:
             return '[green]Free[/]'

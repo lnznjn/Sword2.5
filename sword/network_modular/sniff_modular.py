@@ -19,33 +19,23 @@ class SniffPkt(object):
         info('[bold yellow]\'Ctrl + c\'[/] to stop.')
         try:
             sniff(prn=_pkt_handler, iface=self.interface, filter=filter)
+            info('Sniff over.')
 
         except Scapy_Exception as e:
             error(e)
-            return
-
-        except KeyboardInterrupt:
-            info('Sniff over.')
             return
 
     '''The packets information will be printed out
     and saved as pcap.'''
     def save_sniff(self, filter=None, pcap_name='infomation') -> None:
-        def _pkt_handler(pkt) -> None:
-            wrpcap(r'pcap/' + pcap_name + '.pcap', pkt)
-            info(pkt.summary())
-
         info('[bold yellow]\'Ctrl + c\'[/] to stop.')
         try:
-            sniff(prn=_pkt_handler, iface=self.interface, filter=filter)
+            pkt_list = sniff(prn=lambda pkt: info(pkt.summary()), iface=self.interface, filter=filter)
+            wrpcap(r'pcap/' + pcap_name + '.pcap', pkt_list)
+            info('Sniff over.')
 
         except Scapy_Exception as e:
             error(e)
-            return
-
-        except KeyboardInterrupt:
-            info('Sniff over.')
-            return
 
 if __name__ == '__main__':
     sp = SniffPkt(interface='wlan0')
