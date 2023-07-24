@@ -1,13 +1,15 @@
+#!/usr/bin/env python3
 #env: python3.9.12
 __author__ = "Kiyotaka"
 
 
 import json
-import re
+import re, os
 
 
 from rich import pretty
 from rich.console import Console
+from prompt_toolkit.styles import Style
 
 
 console = Console()
@@ -18,6 +20,7 @@ with console.status('[bold blue]Loading...[/]', spinner='line'):
     from sword.utils.interpreter import BaseInterpreter
     from sword.utils.output import *
     from sword.utils.parser import Command_Parser
+    from sword.utils.input import BaseInput
 
 
     from sword.network_modular.arp_spoof_modular import *
@@ -38,6 +41,22 @@ class SwordInterpreter(BaseInterpreter):
             os.mkdir(f'{os.path.dirname(__file__)}/pictures/')
 
 
+        self._ask_style = Style.from_dict({
+            'prompt': 'ansiyellow bold',
+            'message': 'fg:ansiwhite',
+            'yn': 'underline'
+        })
+
+        self._ask_message = [
+            ('class:prompt', '[>]'),
+            ('', ' '),
+            ('class:message', 'If judge os.'),
+            ('', ' '),
+            ('class:yn', '(Y/n)'),
+            ('', ' ')
+        ]
+
+
 #---------------------------------------------------------------------------------------------------------------
 
 
@@ -55,8 +74,23 @@ class SwordInterpreter(BaseInterpreter):
             type=Command_Parser.Subparser_Type.NO_PMT_SUBP,
             handle=self._quit
         )
+
+
+        self.parser.add_subparser(
+            name='exit',
+            type=Command_Parser.Subparser_Type.NO_PMT_SUBP,
+            handle=self._quit
+        )
         
 
+        #clear
+        self.parser.add_subparser(
+            name='clear',
+            type=Command_Parser.Subparser_Type.NO_PMT_SUBP,
+            handle=self._clear
+        )
+
+        
         #scan
         self.parser.add_subparser(
             name='scan',
@@ -123,11 +157,11 @@ class SwordInterpreter(BaseInterpreter):
 #-----------------------------------------------------------------------------------------------------------------
 
 
-        with open('help.json', 'r') as f:
+        with open(f'{os.path.dirname(__file__)}/help.json', 'r') as f:
             self.help_info = json.load(f)
         f.close()
         
-
+        self.binput = BaseInput()
         self.information = dict()
         self._hosts_list = list()
 
@@ -139,20 +173,19 @@ class SwordInterpreter(BaseInterpreter):
         self._arpspoof.start()
 
 
-    @property
-    def prompt(self):
-        return '[\033[1mSWORD]\033[1;33m>>>\033[0m '
+#------------------------------------------[handles]-----------------------------------------------------------------------
 
 
+    def _clear(self):
+        os.system('clear')
+
+    
     def _quit(self):
         self._limiter.clear()
         self._arpspoof.stop()
         exit()
-
-
-#------------------------------------------[handles]-----------------------------------------------------------------------
-
-
+    
+    
     def _print_help(self):
         ct = Create_help_table()
         ct.set_help_content(self.help_info)
@@ -161,18 +194,14 @@ class SwordInterpreter(BaseInterpreter):
 
     def _scan_handle(self):
         text('Judging os need more time.', end='')
-        choice = input('\033[33;1m[>]\033[0m If judge os. <Y/n> ')
+        #print('\033[33;1m[>]\033[0m If judge os. <Y/n> ', end='')
+        choice = self.binput(message=self._ask_message, style=self._ask_style)
+
 
 
         if choice in ('n', 'N'):
             #with console.status('[bold blue]Scanning...[/]', spinner='line'):
-            try:
-                result = self._scanner.scan_host()
-            
-
-            except KeyboardInterrupt:
-                info('Stopped.')
-                return
+            result = self._scanner.scan_host()
             
 
             info(f'{len(result)} hosts discovered.')
@@ -186,15 +215,7 @@ class SwordInterpreter(BaseInterpreter):
 
         else:
             #with console.status('[bold blue]Scanning...[/]', spinner='line'):
-            try:
-                result = self._scanner.scan_host_and_judge_os()
-            
-
-            except KeyboardInterrupt:
-                info('Stopped.')
-                return
-            
-
+            result = self._scanner.scan_host_and_judge_os()            
             self._hosts_list = result
 
 
@@ -356,8 +377,7 @@ class SwordInterpreter(BaseInterpreter):
 
 if __name__ =='__main__':
     if os.geteuid() != 0:
-        text
-        ('Sword must running in root.')
+        text('Sword must running in root.')
         info('Exiting...')
         exit()
     si = SwordInterpreter()

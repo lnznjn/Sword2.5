@@ -91,7 +91,7 @@ class Scanner(object):
                     num += 1
 
             except KeyboardInterrupt:
-                info('Scaner stopped.')
+                info('Judge stopped.')
         '''
         for host in alive_hosts:
             result = self.nm.scan(hosts=host, arguments='-O -Pn')

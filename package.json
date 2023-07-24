@@ -1,0 +1,22 @@
+{
+  "name": "sword",
+  "version": "2.6.0",
+  "description": "a penetration texting tool based on network protocol.",
+  "main": "sword.py",
+  "bin": {
+    "sword": "sword.py"
+  },
+  "scripts": {
+    "test": "sword"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lnznjn/sword.git"
+  },
+  "author": "Kiyotaka",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lnznjn/sword/issues"
+  },
+  "homepage": "https://github.com/lnznjn/sword#readme"
+}

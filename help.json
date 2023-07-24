@@ -1,9 +1,11 @@
 {
     "help": "Get help.",
     "quit": "Exit.",
-    "scan": "Scan hosts.",
-    "hosts": "Show hosts information.",
-    "sniff": "Sniff packets. sniff -f <filter BPF> -s -n <pcap file name>.",
-    "block": "Block target internet access. block -t <target ip>.",
-    "free": "Restore target internet access."
+    "clear": "Screen Clearing.",
+    "scan": "Host scan.",
+    "hosts": "Print out the scan results.",
+    "sniff": "Sniff packets. sniff -f <filter BPF> -s <pcap file name>.",
+    "block": "Block the target network access. block -t <target ip/num>.",
+    "limit": "Limit the target network access. limit -t <target ip/num>",
+    "free": "Restore the target network access. free -t <target ip/num>"
 }

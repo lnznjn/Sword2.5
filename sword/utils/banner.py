@@ -7,7 +7,7 @@ path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 title = f'''[blue]
 ███████ ██     ██  ██████  ██████  ██████     -=[ [bold white]Author:[/] [bold yellow]Kiyotaka Ayanokoji[/]  
 ██      ██     ██ ██    ██ ██   ██ ██   ██    -=[ 
-███████ ██  █  ██ ██    ██ ██████  ██   ██    -=[ [bold white]Version:[/] [u yellow]2.5[/]
+███████ ██  █  ██ ██    ██ ██████  ██   ██    -=[ [bold white]Version:[/] [u yellow]2.6[/]
      ██ ██ ███ ██ ██    ██ ██   ██ ██   ██    -=[
 ███████  ███ ███   ██████  ██   ██ ██████     -=[ [bold white]Part:[/] [green]{path}[/]
 [/]'''
